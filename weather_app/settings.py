@@ -25,9 +25,9 @@ PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 SECRET_KEY = '^&p$0^52gc9y*pwtai(%-9qu_cv9u+yhyizk-35gjy&o^(ggtc'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -137,12 +137,3 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 
-if os.getcwd() == '/app':
-    import dj_database_url
-    db_from_env = dj_database_url.config(conn_max_age=500)
-    DATABASES['default'].update(db_from_env)
-
-    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-    ALLOWED_HOSTS = ['zuksmaq-weather-app.herokuapp.com']
-    DEBUG = True
-    BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(file)))

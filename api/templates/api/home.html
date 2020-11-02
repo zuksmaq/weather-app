@@ -1,0 +1,131 @@
+<!doctype html>
+{% load crispy_forms_tags %}
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <title>The Weather App</title>
+  </head>
+  <body>
+    
+    <div class="navbar navbar-dark bg-dark box-shadow">
+        <div class="container d-flex justify-content-between">
+            <a href="#" class="navbar-brand d-flex align-items-center">
+            <strong>Weather App</strong>
+            </a>
+            </button>
+        </div>
+    </div>
+
+    <section class="jumbotron text-center">
+        <div class="container">
+          <p class="text-muted">The app will display a default of Cape Town with tomorrow's weather</p>
+            <form method="GET" method="">
+                {% csrf_token %}
+                <div class="row">
+                    <div class="col-6">
+                        {{ form.city|as_crispy_field }}
+                    </div>
+                    <div class="col-6">
+                        {{ form.period|as_crispy_field }}
+                    </div>
+                </div>
+                <button class="btn btn-primary my-2 w-25" type="submit">Submit</button>
+            </form>
+            <h1>Currently showing data for - {{ cntx.city }} for {{ cntx.period }}</h1>
+        </div>
+      </section>
+
+      <section>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <ul class="list-group flex-grow-2">
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            Max
+                            <span class="badge badge-primary badge-pill">{{ cntx.data.max }}</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            Min
+                            <span class="badge badge-primary badge-pill">{{ cntx.data.min }}</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            Avg
+                            <span class="badge badge-primary badge-pill">{{ cntx.data.avg }}</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            Median of Max
+                            <span class="badge badge-primary badge-pill">{{ cntx.data.median_max }}</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            Median of Min
+                            <span class="badge badge-primary badge-pill">{{ cntx.data.median_min }}</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            Humidity
+                            <span class="badge badge-primary badge-pill">{{ cntx.data.humidity }}</span>
+                        </li>
+                    </ul>
+                
+                </div>
+                <div class="clo-md-6">
+                    <canvas id="weatherChart" width="400" height="360"></canvas>
+                </div>
+            
+            </div>
+        </div>
+    </section>
+
+    
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+    <script>
+    var ctx = document.getElementById('weatherChart').getContext('2d');
+    var myChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: ['Max', 'Min', 'Avg', 'Median Max', 'Median Min', 'Humidity'],
+            datasets: [{
+                label: 'Weather Data',
+                data: {{ graph }},
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(255, 206, 86, 0.2)',
+                    'rgba(75, 192, 192, 0.2)',
+                    'rgba(153, 102, 255, 0.2)',
+                    'rgba(255, 159, 64, 0.2)'
+                ],
+                borderColor: [
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(153, 102, 255, 1)',
+                    'rgba(255, 159, 64, 1)'
+                ],
+                borderWidth: 2
+            }]
+        },
+        options: {
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true
+                    }
+                }]
+            }
+        }
+    });
+    </script>
+  </body>
+</html>
